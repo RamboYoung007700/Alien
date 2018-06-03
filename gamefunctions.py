@@ -4,6 +4,28 @@ from alien import Alien
 from bullet import Bullet
 from time import sleep
 
+def read_high_score():
+    filename='highscore.txt'
+    try:
+        with open(filename) as file:
+            highscore=file.read()
+    except FileNotFoundError:
+        highscore=0
+    highscore=int(highscore)
+    return highscore
+
+def save_high_score(high_score):
+    filename='highscore.txt'
+    try:
+        with open(filename) as file:
+            filehighscore=file.read()
+    except FileNotFoundError:
+        with open(filename,'w') as file:
+            file.write(str(high_score))
+    else:
+        with open(filename,'w') as file:
+            file.write(str(high_score))
+
 def ship_hit(settings,stats,screen,ship,sb,aliens,bullets):
     if stats.ships_left>0:
         stats.ships_left-=1
@@ -16,6 +38,7 @@ def ship_hit(settings,stats,screen,ship,sb,aliens,bullets):
     else:
         stats.game_active=False
         pygame.mouse.set_visible(True)
+        save_high_score(stats.high_score)
 
 def check_aliens_bottom(settings,stats,screen,ship,sb,aliens,bullets):
     screen_rect=screen.get_rect()
@@ -32,6 +55,7 @@ def check_keydown_events(event,settings,screen,ship,sb,bullets,stats,aliens):
     if event.key==pygame.K_SPACE:
         fire_bullet(settings,screen,ship,bullets)
     if event.key==pygame.K_q:
+        save_high_score(stats.high_score)
         sys.exit()
     if event.key==pygame.K_p:
         start_game(stats,aliens,bullets,settings,screen,ship,sb)
@@ -50,6 +74,7 @@ def check_keyup_events(event,ship):
 def check_events(settings,screen,stats,play_button,ship,sb,aliens,bullets):
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
+            save_high_score(stats.high_score)
             sys.exit()
         elif event.type == pygame.KEYDOWN:
             check_keydown_events(event,settings,screen,ship,sb,bullets,
@@ -72,6 +97,7 @@ def start_game(stats,aliens,bullets,settings,screen,ship,sb):
     stats.reset_stats()
     settings.initialize_dynamic_settings()
     stats.game_active=True
+   
     
     sb.prep_score()
     sb.prep_high_score()
