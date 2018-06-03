@@ -98,11 +98,7 @@ def start_game(stats,aliens,bullets,settings,screen,ship,sb):
     settings.initialize_dynamic_settings()
     stats.game_active=True
    
-    
-    sb.prep_score()
-    sb.prep_high_score()
-    sb.prep_level()
-    sb.prep_ships()
+    sb.prep_images()
     
     aliens.empty()
     bullets.empty()
@@ -135,11 +131,14 @@ def check_bullet_alien_collisions(settings,screen,stats,sb,ship,aliens,bullets):
             sb.prep_score()
         check_high_score(stats,sb)
     if len(aliens)==0:
-        bullets.empty()
-        settings.increase_speed()
-        stats.level+=1
-        sb.prep_level()
-        create_fleet(settings,screen,ship,aliens)
+        start_new_level(bullets,settings,stats,sb,screen,ship,aliens)
+
+def start_new_level(bullets,settings,stats,sb,screen,ship,aliens):
+    bullets.empty()
+    settings.increase_speed()
+    stats.level+=1
+    sb.prep_level()
+    create_fleet(settings,screen,ship,aliens)
 
 def update_aliens(settings,stats,screen,ship,sb,aliens,bullets):
     check_fleet_edges(settings,aliens)
