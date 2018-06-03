@@ -105,7 +105,8 @@ def start_game(stats,aliens,bullets,settings,screen,ship,sb):
     create_fleet(settings,screen,ship,aliens)
     ship.center_ship()
            
-def update_screen(ai_settings,screen,sb,ship,bullets,aliens,stats,play_button):
+def update_screen(ai_settings,screen,sb,ship,bullets,aliens,
+                  stats,play_button,ins):
         screen.fill(ai_settings.bg_color)
         for bullet in bullets.sprites():
             bullet.draw_bullet()
@@ -114,6 +115,7 @@ def update_screen(ai_settings,screen,sb,ship,bullets,aliens,stats,play_button):
         sb.show_score()
         if not stats.game_active:
             play_button.draw_button()
+            ins.draw_button()
         pygame.display.flip()
 
 def update_bullets(settings,screen,stats,sb,ship,aliens,bullets):
