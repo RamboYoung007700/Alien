@@ -10,6 +10,11 @@ from scoreboard import Scoreboard
 
 def run_game():
     pygame.init()
+    pygame.mixer.init()
+    pygame.mixer.music.load('sound/bgm.mp3')
+    pygame.mixer.music.set_volume(0.4)
+    pygame.mixer.music.play()
+
     ai_settings=settings.Settings()
     screen = pygame.display.set_mode(
         (ai_settings.screen_width,ai_settings.screen_height))

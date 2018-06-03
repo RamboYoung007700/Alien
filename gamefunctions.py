@@ -28,6 +28,7 @@ def save_high_score(high_score):
 
 def ship_hit(settings,stats,screen,ship,sb,aliens,bullets):
     if stats.ships_left>0:
+        play_explo_sound()
         stats.ships_left-=1
         sb.prep_ships()
         aliens.empty()
@@ -36,6 +37,8 @@ def ship_hit(settings,stats,screen,ship,sb,aliens,bullets):
         ship.center_ship()
         sleep(0.5)
     else:
+        play_explo_sound()
+        play_gameover_sound()
         stats.game_active=False
         pygame.mouse.set_visible(True)
         save_high_score(stats.high_score)
@@ -53,7 +56,7 @@ def check_keydown_events(event,settings,screen,ship,sb,bullets,stats,aliens):
     if event.key==pygame.K_LEFT:
         ship.moving_left=True
     if event.key==pygame.K_SPACE:
-        fire_bullet(settings,screen,ship,bullets)
+        fire_bullet(settings,screen,ship,bullets,stats)
     if event.key==pygame.K_q:
         save_high_score(stats.high_score)
         sys.exit()
@@ -128,6 +131,7 @@ def update_bullets(settings,screen,stats,sb,ship,aliens,bullets):
 def check_bullet_alien_collisions(settings,screen,stats,sb,ship,aliens,bullets):
     collisions=pygame.sprite.groupcollide(bullets,aliens,True,True)
     if collisions:
+        play_explo_sound()
         for aliens in collisions.values():
             stats.score+=settings.alien_points*len(aliens)
             sb.prep_score()
@@ -193,14 +197,29 @@ def check_high_score(stats,sb):
         stats.high_score=stats.score
         sb.prep_high_score()
 
-
+def play_fire_sound():
+    fire=pygame.mixer.Sound("sound/fire.ogg")
+    fire.set_volume(0.4)
+    fire.play()
+def play_explo_sound():
+    explo=pygame.mixer.Sound("sound/explo.ogg")
+    explo.play()
+def play_nobullet_sound():
+    nobullet=pygame.mixer.Sound("sound/nobullet.ogg")
+    nobullet.play()
+def play_gameover_sound():
+    gameover=pygame.mixer.Sound("sound/gameover.wav")
+    gameover.play()
 
     
 
-def fire_bullet(settings,screen,ship,bullets):
-    if len(bullets)<settings.bullets_allowed:
+def fire_bullet(settings,screen,ship,bullets,stats):
+    if len(bullets)<settings.bullets_allowed and stats.game_active:
+        play_fire_sound()
         new_bullet=Bullet(settings,screen,ship)
         bullets.add(new_bullet)
+    elif stats.game_active:
+        play_nobullet_sound()
 
     
     

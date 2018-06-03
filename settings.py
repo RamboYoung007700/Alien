@@ -19,17 +19,17 @@ class Settings():
         self.bullet_color=(250,0,0)
 
         #加快游戏节奏系数
-        self.speedup_scale=1.1
+        self.speedup_scale=1.3
         #外星人分数提高
-        self.score_scale=1.5
+        self.score_scale=2
 
         #动态属性初始化
         self.initialize_dynamic_settings()
 
     def initialize_dynamic_settings(self):
-        self.ship_speed_factor=1.5
-        self.bullet_speed_factor=3
-        self.alien_speed_factor=1
+        self.ship_speed_factor=1
+        self.bullet_speed_factor=1
+        self.alien_speed_factor=0.5
         self.alien_points=50
         self.fleet_direction=1
 
